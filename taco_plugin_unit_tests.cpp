@@ -98,9 +98,9 @@ mat_mat_sum(csr *a, csr *b, csr *c,
  * Matrix vector multiplication.
  */
 [[clang::syntax(taco)]] void
-mat_vec_mul(vector *a, csr *b, vector *c,
-            std::string format = "-f=b:ds:0,1 -f=c:d -f=a:d") {
-  a(i) = b(i, j) * c(j)
+mat_vec_mul(vector *y, csr *A, vector *x,
+            std::string format = "-f=A:ds:0,1 -f=y:d -f=x:d") {
+  y(i) = A(i, j) * x(j)
 }
 
 /**

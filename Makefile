@@ -1,4 +1,5 @@
-CC = g++
+CC = clang
+CXX = clang++
 #-- -- -- - Define names of all the object files in this project
 INTELOBJS = intel - mkl.o BIN = bin LIB = lib OBJ = obj
 GTEST_DIR = googletest/googletest
@@ -11,7 +12,8 @@ SRC =./
 #-- -- -- - Define the name of the resulting released product
 
 #-- -- -- - Define options passed by make to the compiler
-CFLAGS = -g -std=c++17 
+CFLAGS = -g -std=c++11
+CPPFLAGS += $(CFLAGS)
 FFLAGS= -std=f2003
 #-- -- -- - Setup tags for source instruction for mkl library
 MKLSRCTAGS =/opt/intel/compilers_and_libraries_2018.2.199/linux/mkl/bin/mklvars.sh ia32 
@@ -31,6 +33,7 @@ GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 
 #
 #
+all: filecheck unit-test
 filecheck: 
 	if [ ! -d "./bin" ]; then mkdir bin; fi
 	if [ ! -d "./obj" ]; then mkdir obj; fi
@@ -60,7 +63,7 @@ taco_plugin_test:$(SRC)/taco_plugin_unit_tests.cpp
 	       	-fplugin=${LLVM_ROOT}/build/lib/TacoTokensSyntax.so -o $@
 
 unit-test: filecheck 	$(SRC)/taco_plugin_gtest.cpp $(OBJ_DIR)/gtest_main.a
-	clang++ $(CFLAGS) -lpthread  -I$(GTEST_DIR)/include $(OBJ_DIR)/gtest_main.a\
+	clang++ $(CFLAGS) -lpthread   -I$(GTEST_DIR)/include $(OBJ_DIR)/gtest_main.a\
 	       	$(SRC)/taco_plugin_gtest.cpp \
 		-fplugin=${LLVM_ROOT}/build/lib/TacoTokensSyntax.so -o bin/$@
 	./bin/$@
